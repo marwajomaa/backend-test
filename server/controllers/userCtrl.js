@@ -1,10 +1,19 @@
 const Users = require("../models/userModel");
 const httpError = require("../middlewares/http-error");
+exports.getUsers = async (req, res, next) => {
+  await Users.find({});
+};
 
 exports.saveUser = async (req, res, next) => {
-  console.log(req.body, "................................");
   try {
-    const { userId, username, emailAddress, phoneNumber, password } = req.body;
+    const {
+      userId,
+      username,
+      emailAddress,
+      phoneNumber,
+      password,
+      token,
+    } = req.body;
 
     const user = await Users.findOne({ username });
 
@@ -20,6 +29,7 @@ exports.saveUser = async (req, res, next) => {
       emailAddress,
       phoneNumber,
       password,
+      token,
     });
 
     //save to mongodb
@@ -36,8 +46,25 @@ exports.saveUser = async (req, res, next) => {
 };
 
 exports.updateUser = async (req, res, next) => {
-  res.json({
-    status: "success",
-    msg: "User has been updated successfully",
-  });
+  const { id } = req.params;
+  console.log(id);
+  const { userId, username, emailAddress, phoneNumber, password } = req.body;
+
+  try {
+    const user = await Users.findOneAndUpdate(
+      { userId: id },
+      { userId, username, emailAddress, phoneNumber, password }
+    );
+
+    if (!user) return next(new httpError("This user not exists", 400));
+
+    res.json({
+      status: "success",
+      msg: "User has been updated successfully",
+      user,
+    });
+  } catch (err) {
+    console.log(err);
+    next(new httpError("something went wrong, please try again"), 500);
+  }
 };
