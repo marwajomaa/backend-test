@@ -3,7 +3,7 @@ const httpError = require("../middlewares/http-error");
 
 exports.getUsers = async (req, res, next) => {
   const users = await Users.find({});
-  res.json({ users, msg: "goooooooood" });
+  res.json({ users, msg: "Users fetched successfully" });
 };
 
 exports.saveUser = async (req, res, next) => {
