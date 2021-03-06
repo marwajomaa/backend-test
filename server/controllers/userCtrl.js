@@ -1,7 +1,9 @@
 const Users = require("../models/userModel");
 const httpError = require("../middlewares/http-error");
+
 exports.getUsers = async (req, res, next) => {
-  await Users.find({});
+  const users = await Users.find({});
+  res.json({ users, msg: "goooooooood" });
 };
 
 exports.saveUser = async (req, res, next) => {
