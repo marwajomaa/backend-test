@@ -22,13 +22,6 @@ app.use(express.static(`${__dirname}/public`));
 
 app.use("/api", router);
 
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "..", "client", "build")));
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "..", "client", "build", "index.html"));
-  });
-}
-
 //Middleware that handles error for unsupported routes
 app.use(async (req, res, next) => {
   const err = new HttpError("Could not find this route", 404);
