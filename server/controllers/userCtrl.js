@@ -36,7 +36,7 @@ exports.saveUser = async (req, res, next) => {
 
     //save to mongodb
     await newUser.save();
-
+    console.log("save to mongodb------------------");
     res.json({
       status: "success",
       msg: "User has been successfully saved",
