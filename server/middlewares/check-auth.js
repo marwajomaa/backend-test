@@ -2,30 +2,19 @@ const Users = require("../models/userModel");
 const boom = require("boom");
 
 module.exports = () => async (req, res, next) => {
-  console.log(req.params, "iddddddddddddddddddddddddddd");
-  const id = req.params.id;
-  try {
-    const token = req.headers.authorization || {};
-    if (!id) return res.status(400).json({ msg: "Invalid Authentication" });
+  const cookies = req.cookies ? req.cookies : {};
 
-    let user;
+  if (cookies.token) {
     try {
-      user = await Users.findOne({ userId: id });
+      const user = await Users.findOne({ token: cookies.token });
+      if (user) {
+        req.user = user;
+        next();
+      }
     } catch (err) {
-      console.log(err);
+      return res.status(400).json({ msg: err.message });
     }
-
-    console.log(user, "uuuuuuuuuuuuuuuuuuuuuser");
-
-    if (!user) {
-      console.log("oooooooooooooooooooh no user");
-      return res.status(400).json({ msg: "Invalid Authentication" });
-    }
-
-    req.user = user;
-    console.log(user);
-    next();
-  } catch (err) {
-    return res.status(500).json({ msg: err.message });
+  } else {
+    return res.status(400).json({ msg: "Invalid Authentication" });
   }
 };
