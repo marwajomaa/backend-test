@@ -2,11 +2,11 @@ const Users = require("../models/userModel");
 const boom = require("boom");
 
 module.exports = () => async (req, res, next) => {
-  const cookies = req.cookies ? req.cookies : {};
+  const authHeader = req.headers.authorization;
 
-  if (cookies.token) {
+  if (authHeader) {
     try {
-      const user = await Users.findOne({ token: cookies.token });
+      const user = await Users.findOne({ token: authHeader });
       if (user) {
         req.user = user;
         next();
