@@ -23,6 +23,6 @@ router.get("/user/:id", cors(corsOptions), getUser);
 
 router.post("/save-user", cors(corsOptions), headers, saveUser);
 
-router.patch("/update-user/:id", [cors(corsOptions), headers], updateUser);
+router.patch("/update-user/:id", auth(), updateUser);
 
 module.exports = router;
