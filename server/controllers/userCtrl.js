@@ -6,6 +6,16 @@ exports.getUsers = async (req, res, next) => {
   res.json({ users, msg: "Users fetched successfully" });
 };
 
+exports.getUser = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const user = await Users.findOne({ userId: id });
+    res.json(user);
+  } catch (err) {
+    return next(new httpError("User not found"), 400);
+  }
+};
+
 exports.saveUser = async (req, res, next) => {
   try {
     const {
@@ -36,7 +46,6 @@ exports.saveUser = async (req, res, next) => {
 
     //save to mongodb
     await newUser.save();
-
     res.json({
       status: "success",
       msg: "User has been successfully saved",

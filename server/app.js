@@ -1,5 +1,6 @@
 const express = require("express");
 const morgan = require("morgan");
+const cors = require("cors");
 const router = require("./routes");
 const HttpError = require("./middlewares/http-error");
 const path = require("path");
@@ -10,6 +11,7 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
+app.use("*", cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
